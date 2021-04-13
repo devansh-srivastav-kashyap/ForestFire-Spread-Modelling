@@ -1,7 +1,51 @@
-function out=forestfire(ignit_x,ignit_y)
+%-------------------------------------------------------------------------%
+%-------------------------------------------------------------------------%
+% Author- Devansh Srivastava
+% Dt- 14-04-2021
+% Title- Forest Fire Spread Model for Uttarakhand State
+%-------------------------------------------------------------------------%
+%-------------------------------------------------------------------------%
+
+% forestfire() function returns an animation showing the burning of the Forest Area under 
+% Uttarakhand Region. 
+% Black color denotes burnt off area
+% Red color denotes presently burning area
+% Green color denotes area that has potential to burn(fuel)
+% Magenta color denotes non-fuel
+%
+% data=GEOTIFF_READ('.tif data'); 
+% this function reads the Raster data(tiff data) and returns a struct 
+% To access the data, use data.z.  This will return the value of the grids. 
+% data.x and data.y will give the lat and long 
+%
+% row=lat2row(lat);
+% this function converts latitude to rows 
+% col=lon2col(lon);
+% this function converts longitude to columns
+%
+% [forest,prob_veg]=forest_matrix(triggered row,trigerred column,value of forest matrix);
+% this function takes rows and columns of the point where fire has been
+% initiated, along with a matrix of values of the raster data  and returns
+% the forest matrix and 372x372 matrix of probabilty of getting fire to the vegetation
+%
+% wind_matrix=windprob_matrix();
+% this function returns a 3x3 matrix of pw for every grid cell that is neighbour to forest_matrix(i,j)
+
+% p_burn=prob_burn(i,j,prob_veg,slope);
+% this function inputs present coordinates, prob_veg(mentioned above) and a
+% 3D Matrix in which the data of neighbourhood slope is stored in the third
+% dimension of the slope_matrix. In return, it gives a 3x3 matrix that
+% tells the final probability of the neighbourhood cells of catching fire.
+%--------------------------START OF THE PROGRAM---------------------------%
+
+function out=forestfire(lat,lon)
+
+ignit_x=lat2row(lat);
+ignit_y=lon2col(lon);
 
 if ignit_x>277
-    error('Coordinate out of Map');
+    error('Coordinate out of Area');
+    error('Please enter latitude in range--> 77.5557 to 81.0255');
 end
  %%import all the data 
     %Forest and Vegetation
@@ -130,7 +174,7 @@ gen=1; iterations=500;
     x=1:372; y=1:372;
     surf(x,y,new_forest,new_forest);
     view(360,90);
-    colormap([1 0 1;0 1 0;1 0 0;0 0 0]);
+    colormap([0 0 1;0 1 0;1 0 0;0 0 0]);
     colorbar
     caxis([1 4]);
     axis([1,length(x),1,length(y),1,4])
